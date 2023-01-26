@@ -18,7 +18,7 @@ public class Main {
 		 * 26 % 7 = 5 -> 금요일.
 		 */
 		int[] dateUpdate = {0, 3, 0, 3, 2, 3, 2, 3, 3, 2, 3, 2}; // 1일이 무슨 요일인지 체크하기 위한 배열
-		for (int i = 1; i < x; i++) { // 1월은 더할 필요 없음, 해당월 전까지 
+		for (int i = 0; i < x; i++) { // 1월은 더할 필요 없음, 해당월 전까지 
 			startDate += dateUpdate[i];
 			startDate %= 7; // 7로 나누어서 시작요일 계산 (0: 일요일 ~ 6: 토요일)
 		}
