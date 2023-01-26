@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
-		int startDate = 1; // 1월 1일은 월요일 (일요일이 달력기준 맨 왼쪽이므로 0으로 함)
+		int startDate = 1; // 2007년 1월 1일은 월요일 (일요일이 달력기준 맨 왼쪽이므로 0으로 함)
 		int x = input.nextInt(); // 월
 		int y = input.nextInt(); // 일
 		/*
