@@ -1,4 +1,4 @@
- // Ladder1
+// Ladder1
 
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -46,30 +46,28 @@ public class Solution {
 				
 				// 끝에 도달하기 전까지 이동
 				while (row < 99) {
-//					System.out.println("row: " + row + ", col: " + col);
-					
+					// 왼쪽으로 이동할 수 있는지 확인
 					if (ableToMove(ladder, row, col-1)) {
-//						System.out.println("왼쪽으로 이동");
 						col--;
-//						System.out.println("row: " + row + ", col: " + col);
 						// 왼쪽으로 이동할 수 있다면 index를 벗어나지 않으면서 아래로 사다리가 날 때까지 계속 왼쪽으로 이동
 						while (ladder[row+1][col] != 1) {
 							col--;
-//							System.out.println("row: " + row + ", col: " + col);
 						}
+						// 이동하면
 						row++;
+						
+					// 오른쪽으로 이동할 수 있는지 확인
 					} else if (ableToMove(ladder, row, col+1)) {
-//						System.out.println("오른쪽으로 이동");
 						col++;
-//						System.out.println("row: " + row + ", col: " + col);
 						// 왼쪽으로 이동할 수 있다면 index를 벗어나지 않으면서 아래로 사다리가 날 때까지 계속 왼쪽으로 이동
 						while (ladder[row+1][col] != 1) {
 							col++;
-//							System.out.println("row: " + row + ", col: " + col);
 						}
-//						System.out.println("다시 아래로 이동");
 						row++;
-					} else {
+					} 
+					
+					// 둘다 이동할 수 없다면 아래로 한 칸 이동
+					else {
 						row++;
 					}
 
