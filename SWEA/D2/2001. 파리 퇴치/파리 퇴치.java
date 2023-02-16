@@ -1,4 +1,4 @@
- // 파리잡기
+// 파리잡기
 
 import java.util.Scanner;
 
@@ -27,29 +27,25 @@ public class Solution {
 			
 			// 파리채로 잡은 파리 수 구하기
 			// 배열의 각 지점에서 시작하는 M*M 배열이 있다고 생각한다
-			// index를 벗어나는 케이스를 제외하기 위해 배열 전체에서 파리채 크기만큼 행/열별로 제외
-			for (int r = 0; r < N-M+1; r++) {
-				for (int c = 0; c < N-M+1; c++) {
-					
+			for (int r = 0; r < N; r++) {
+				for (int c = 0; c < N; c++) {
 					// 구간 별로 죽은 파리수 구하기   
 					int deadFlies = 0;
-					
-					
-					// MxM 크기의 파리채로 내려치기
+					/*
+					 * MxM 크기의 파리채로 내려치기
+					 */
 					for (int dr = 0; dr < M; dr++) {
 						for (int dc = 0; dc < M; dc++) {
 							int nr = r + dr;
 							int nc = c + dc;
+							if (nr < 0 || nc < 0 || nr >= N || nc >= N) continue;
 							deadFlies += flies[nr][nc];
 						}
 					}
-					
-					
-					if (deadFlies > max) max = deadFlies;
+					if (max < deadFlies) max = deadFlies;
 				}
 			}
 			
-			// 정답 출력
 			System.out.printf("#%d %d\n", tc, max);
 		}
 		
