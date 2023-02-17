@@ -1,4 +1,4 @@
- // 카드
+// 카드
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -22,7 +22,6 @@ public class Main {
 			queue.poll();
 			if (queue.size() == 1) break;
 			queue.offer(queue.poll());
-			if (queue.size() == 1) break;
 		}
 		
 		System.out.println(queue.peek());
