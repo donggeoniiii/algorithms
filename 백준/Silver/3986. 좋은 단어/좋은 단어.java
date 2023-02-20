@@ -4,8 +4,9 @@ import java.util.Scanner;
 import java.util.Stack;
 
 /*
- * 선끼리 교차하지 않는다 == 괄호와 동일
- * 만약 stack에 쌓는 과정에서 top이 )인데 (가 들어오면 나쁜 단어
+ * 선끼리 교차하지 않는다 == 괄호와 유사
+ * 이번엔 같은 것끼리 만나면 pop이 되게
+ * 만약 stack에 다 넣었는데 stack에 뭐가 남았다면 나쁜 단어
  */
 
 public class Main {
