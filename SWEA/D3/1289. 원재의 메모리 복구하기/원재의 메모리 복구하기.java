@@ -1,20 +1,23 @@
-// 원재의 메모리 복구하기
-
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Stack;
 
 public class Solution {
-	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		Stack<Character> stack;
 		StringBuilder sb = new StringBuilder();
 		
 		// 테스트케이스 개수
-		int T = Integer.parseInt(input.nextLine());
+		int T = Integer.parseInt(br.readLine());
 		
 		for (int tc = 1; tc <= T; tc++) {
 			// 메모리 입력
-			String s = input.nextLine();
+			String s = br.readLine();
 			
 			// 변환을 몇번 해야하는지 세기 위한 스택 생성
 			stack = new Stack<>();
@@ -40,11 +43,14 @@ public class Solution {
 			}
 			
 			// 정답 추가
-			sb.append("#").append(tc).append(" ").append(switchCnt).append("\n");
+			bw.write("#" + tc + " " + switchCnt + "\n");
+//			sb.append("#").append(tc).append(" ").append(switchCnt).append("\n");
 		}
 		
 		// 정답 출력
-		System.out.println(sb.toString());
+//		System.out.println(sb.toString());
+		bw.flush();
+		bw.close();
 		
 		
 	}
