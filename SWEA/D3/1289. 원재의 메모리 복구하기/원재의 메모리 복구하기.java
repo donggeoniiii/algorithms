@@ -1,36 +1,51 @@
+// 원재의 메모리 복구하기
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.FileInputStream;
+import java.util.Scanner;
+import java.util.Stack;
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+public class Solution {
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		Stack<Character> stack;
+		StringBuilder sb = new StringBuilder();
 		
 		// 테스트케이스 개수
-		int T = Integer.parseInt(br.readLine());
+		int T = Integer.parseInt(input.nextLine());
 		
-		/*
-		 * 목표값에서 0 -> 1, 1-> 0으로 바뀌는 부분의 갯수가 최소 수정횟수
-		 * charAt() 메소드를 이용해 앞뒤 값 비교, 다를때마다 cnt +1
-		 * 돌고 나서 cnt 반환 
-		 */
-		for (int i = 1; i <= T; i++) {
-			String s = br.readLine();
-			int cnt = 0;
+		for (int tc = 1; tc <= T; tc++) {
+			// 메모리 입력
+			String s = input.nextLine();
 			
-			// 맨 앞자리가 1인경우 전체를 1로 만들고 시작해야 하므로 cnt +1
-			if (s.charAt(0) == '1') cnt++;
+			// 변환을 몇번 해야하는지 세기 위한 스택 생성
+			stack = new Stack<>();
 			
-			for (int j = 1; j < s.length(); j++) {
-				if (s.charAt(j) != s.charAt(j-1)) cnt++;
+			// 변환을 몇번 해야하는지 세는 카운트
+			int switchCnt = 0;
+			
+			// 스택에 첫자리부터 넣으면서 top과 같은지 비교
+			for (char c : s.toCharArray()) {
+				
+				// 일단 첫 자리면 push부터, 넣은 값이 1이면 카운트 1부터 시작
+				if (stack.isEmpty()) {
+					stack.push(c);
+					if (stack.peek() == '1') switchCnt++;
+				}
+				
+				// 첫자리가 아니면 현재 top과 넣으려는 값이 같은지 보고 카운트여부 따진 다음 push
+				else {
+					if (stack.peek() != c) switchCnt++;
+					stack.push(c);
+				}
+					
 			}
 			
-			System.out.printf("#%d %d\n", i, cnt);
-			
+			// 정답 추가
+			sb.append("#").append(tc).append(" ").append(switchCnt).append("\n");
 		}
+		
+		// 정답 출력
+		System.out.println(sb.toString());
+		
+		
 	}
 }
