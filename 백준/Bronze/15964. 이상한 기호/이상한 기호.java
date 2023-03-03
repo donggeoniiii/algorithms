@@ -14,8 +14,8 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
 		// 숫자 입력
-		int A = Integer.parseInt(st.nextToken());
-		int B = Integer.parseInt(st.nextToken());
+		long A = Long.parseLong(st.nextToken());
+		long B = Long.parseLong(st.nextToken());
 		
 		// 정답 출력
 		bw.write((A+B)*(A-B)+"");
