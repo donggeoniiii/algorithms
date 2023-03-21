@@ -27,24 +27,21 @@ public class Solution {
 				nums[i] = input.nextInt(); 
 			}
 			
-			// 배열을 돌면서 각 숫자를 더해 k를 만든다
-			// 뽑은 숫자의 합, k가 되는 경우의 수 초기화
-			int selSum = 0;
+			// k가 되는 경우의 수 초기화
 			int kCnt = 0;
-			
-			// 총 부분집합의 개수(공집합 포함): 2^n == 1<<n
-			int[] powerset = new int[1<<N];
 			
 			// idx: 1<<N개 중 하나의 부분집합
 			for (int idx = 0; idx < (1<<N); idx++) {
+				// 배열을 돌면서 각 숫자를 더해 k를 만든다
+				int selSum = 0;
 				
 				// N개의 각 숫자에 대해 해당 부분집합에 포함되는지 여부를 확인, 포함되는 경우 합산
 				for (int j = 0; j < N; j++) {
-					if ((idx & (1<<j)) > 0) powerset[idx]+= nums[j]; 
+					if ((idx & (1<<j)) > 0) selSum+= nums[j]; 
 				}
 				
 				// 만약 해당 부분집합의 합이 K면 k카운트 증가
-				if (powerset[idx] == K) kCnt++;
+				if (selSum == K) kCnt++;
 			}
 			
 			// 정답 입력
