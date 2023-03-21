@@ -2,16 +2,7 @@
 
 import java.util.Scanner;
 
-public class Solution {
-	// 주어진 자연수의 개수, 만들어야 하는 수
-	static int N, K;
-	
-	// 뽑은 숫자의 합
-	static int selSum;
-	
-	// 합이 K가 되는 경우의 수
-	static int kCnt;
-	
+public class Solution {	
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		StringBuilder sb = new StringBuilder();
@@ -23,10 +14,10 @@ public class Solution {
 			sb.append("#").append(tc).append(" ");
 			
 			// 주어진 자연수 개수
-			N = input.nextInt();
+			int N = input.nextInt();
 			
 			// 만들어야 하는 수
-			K = input.nextInt();
+			int K = input.nextInt();
 			
 			// 주어지는 자연수를 보관할 배열
 			int[] nums = new int[N];
@@ -38,8 +29,8 @@ public class Solution {
 			
 			// 배열을 돌면서 각 숫자를 더해 k를 만든다
 			// 뽑은 숫자의 합, k가 되는 경우의 수 초기화
-			selSum = 0;
-			kCnt = 0;
+			int selSum = 0;
+			int kCnt = 0;
 			
 			// 총 부분집합의 개수(공집합 포함): 2^n == 1<<n
 			int[] powerset = new int[1<<N];
