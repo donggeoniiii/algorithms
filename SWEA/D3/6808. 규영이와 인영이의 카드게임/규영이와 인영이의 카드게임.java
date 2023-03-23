@@ -75,16 +75,23 @@ public class Solution {
 			// 규영이의 카드 입력
 			for (int idx = 0; idx < 9; idx++) {
 				p1[idx] = input.nextInt(); 
-				drawed[p1[idx]] = true; 
+				drawed[p1[idx]] = true; // 규영이가 뽑아간 거 표시
 			}
 			
 			// 인영이의 카드 입력
-			int idx = 0;
+			int idx = 0; 
 			for (int i = 1; i <= 18; i++) {
+				
+				// 규영이가 뽑아간거면 
 				if (drawed[i]) {
+					
+					// 나중에 게임 진행을 위해 뽑은 표시 지우고
 					drawed[i] = false;
+					
+					// 넘김
 					continue;
 				}
+				// 규영이가 뽑은게 아니면 인영이꺼니까 추가
 				p2[idx++] = i;
 			}
 			
