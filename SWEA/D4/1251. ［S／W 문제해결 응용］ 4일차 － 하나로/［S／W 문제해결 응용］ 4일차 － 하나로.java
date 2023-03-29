@@ -2,6 +2,7 @@
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class Solution {
@@ -25,12 +26,6 @@ public class Solution {
 	 *  index 0 : x좌표, index 1: y좌표
 	 */
 	static int[][] islands;
-	
-	/**
-	 *  모든 터널의 정보
-	 *  index 0 : 시작점, index 1 : 끝점, index 2 : 점 사이 거리
-	 */
-	static double[][] tunnels;
 	
 	/** 
 	 * 모든 터널의 종착지(부모 섬 ? 표시)
@@ -85,8 +80,18 @@ public class Solution {
 			
 			// 배열 크기 설정
 			islands = new int[V][2];
-			tunnels = new double[E][3];
 			departure = new int[V];
+			
+			// 크루스칼 알고리즘을 위한 우선순위 queue 
+			// 비용순으로 모든 터널을 정렬한다
+			PriorityQueue<double[]> tunnel = new PriorityQueue<>(new Comparator<double[]>() {
+				
+				@Override
+				public int compare(double[] o1, double[] o2) {
+					return (int) (o1[2] - o2[2]);
+				}
+				
+			});
 			
 			// 섬 별 위치 정보 입력 (x좌표)
 			for (int idx = 0; idx < V; idx++) {
@@ -114,35 +119,31 @@ public class Solution {
 					double dy = Math.abs(islands[idx][1] - islands[jdx][1]);
 					double dist = (dx*dx) + (dy*dy);
 					
-					// 터널 정보 입력
-					tunnels[tdx][0] = idx;
-					tunnels[tdx][1] = jdx;
-					tunnels[tdx++][2] = dist;
+					/**
+					 * 	터널 정보 입력
+					 *  모든 터널의 정보
+					 *  index 0 : 시작점, index 1 : 끝점, index 2 : 점 사이 거리
+					 */
+					
+					double[] newTunnel = new double[3];
+					newTunnel[0] = idx;
+					newTunnel[1] = jdx;
+					newTunnel[2] = dist;
+					
+					// 우선순위 큐에 추가
+					tunnel.offer(newTunnel);
 				}
 			}
 			
 			
 			/**
 			 * 크루스칼 알고리즘 1단계
-			 * 모든 섬을 원소의 개수가 하나인 부분 집합으로 만들고, 비용순으로 모든 터널을 정렬한다
+			 * 모든 섬을 원소의 개수가 하나인 부분 집합으로 만든다
 			 */
 			for (int idx = 0; idx < V; idx++) {
 				makeSet(idx);
 			}
-			
-			// 비용은 거리에 비례하므로 두 점 사이 거리가 짧은 순으로 정렬
-			Arrays.sort(tunnels, new Comparator<double[]>(){
 
-				@Override
-				public int compare(double[] o1, double[] o2) {
-					// TODO Auto-generated method stub
-					return (int) (o1[2] - o2[2]);
-				}
-
-				
-			});
-
-		
 			
 			/**
 			 * 크루스칼 알고리즘 2단계
@@ -155,12 +156,12 @@ public class Solution {
 			int cnt = 0;
 			
 			// 모든 터널에 대해 탐색
-			tdx = 0; // tunnel index;
-			while (tdx < E) {
+			while (!tunnel.isEmpty()) {
 				
 				// 터널 하나 선정, 시작섬 끝섬 가져오기
-				int x = (int) tunnels[tdx][0];
-				int y = (int) tunnels[tdx][1];
+				double[] curTunnel = tunnel.poll();
+				int x = (int) curTunnel[0];
+				int y = (int) curTunnel[1];
 				
 				// 터널 하나를 뽑았는데 둘의 부모섬(?)이 다르면 사이클이 생기지 않으므로
 				if (findSet(x) != findSet(y)) {
@@ -170,7 +171,7 @@ public class Solution {
 					union(x, y);
 					
 					// 터널 건설 확정, 비용 추가
-					totalCost += tunnels[tdx][2] * tax;
+					totalCost += curTunnel[2] * tax;
 					
 					// 선택 카운트 증가
 					cnt++;
@@ -178,9 +179,6 @@ public class Solution {
 				
 				// 만약 필요한 개수를 다 뽑았다면 종료
 				if (cnt == V-1) break;
-				
-				// 다음 간선으로 이동
-				tdx++;
 				
 			}
 			
