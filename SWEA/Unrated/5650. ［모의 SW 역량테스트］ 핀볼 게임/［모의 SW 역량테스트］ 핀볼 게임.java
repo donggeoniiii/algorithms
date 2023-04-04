@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Solution {
-	// 전체 맵의 크기 1
+	// 전체 맵의 크기
 	static int N;
 	
 	// 전체 맵
@@ -57,8 +57,9 @@ public class Solution {
 					// 5번 블록(ㅁ)를 만났다고 생각하고 반대 방향으로 방향 전환
 					dir = (dir + 2) % 4;
 					
-					// 벽에 부딪혀도 방향 전환이 일어나므로 카운트 증가
-					score++;
+					// 벽에 부딪히는 순간 바로 길을 돌아가기 때문에, 현재 카운트에 +1한 값을 저장하고 loop 종료
+					score = score*2 + 1;
+					terminated = true;
 				}
 				// 2. index 안에서 
 				else {
@@ -76,61 +77,62 @@ public class Solution {
 					case 1: // 블럭 1: 아래로 내려오면서(2) 만나면 오른쪽(3)으로, 왼쪽으로 가면서(1) 만나면 위(0)로, 나머지 반사
 						if (dir == 2) dir = 3;
 						else if (dir == 1) dir = 0;
-						else dir = (dir + 2) % 4;
+						else {
+							dir = (dir + 2) % 4;
+
+							// 180도로 부딪히는 순간 바로 길을 돌아가기 때문에, 현재 카운트에 +1한 값을 저장하고 loop 종료
+							score = (score-1)*2 + 1;
+							terminated = true;
+						}
 						break;
 						
 					case 2: // 블럭 2: 위로 올라오면서(0) 만나면 오른쪽(3)으로, 왼쪽으로 가면서(1) 만나면 아래(2)로, 나머지 반사
 						if (dir == 0) dir = 3;
 						else if (dir == 1) dir = 2;
-						else dir = (dir + 2) % 4;
+						else {
+							dir = (dir + 2) % 4;
+
+							// 180도로 부딪히는 순간 바로 길을 돌아가기 때문에, 현재 카운트에 +1한 값을 저장하고 loop 종료
+							score = (score-1)*2 + 1;
+							terminated = true;
+						}
 						break;
 						
 					case 3: // 블럭 3: 위로 올라오면서(0) 만나면 왼쪽(1)으로, 오른쪽으로 가면서(3) 만나면 아래(2)로, 나머지 반사
 						if (dir == 0) dir = 1;
 						else if (dir == 3) dir = 2;
-						else dir = (dir + 2) % 4;
+						else {
+							dir = (dir + 2) % 4;
+
+							// 180도로 부딪히는 순간 바로 길을 돌아가기 때문에, 현재 카운트에 +1한 값을 저장하고 loop 종료
+							score = (score-1)*2 + 1;
+							terminated = true;
+						}
 						break;
 						
 					case 4: // 블럭 4: 아래로 내려오면서(2) 만나면 왼쪽(1)으로, 오른쪽으로 가면서(3) 만나면 위(0)로, 나머지 반사
 						if (dir == 2) dir = 1;
 						else if (dir == 3) dir = 0;
-						else dir = (dir + 2) % 4;
+						else {
+							dir = (dir + 2) % 4;
+
+							// 180도로 부딪히는 순간 바로 길을 돌아가기 때문에, 현재 카운트에 +1한 값을 저장하고 loop 종료
+							score = (score-1)*2 + 1;
+							terminated = true;
+						}
 						break;
 						
 					case 5: // 블럭 5: 반사
 						dir = (dir + 2) % 4;
+						
+
+						// 180도로 부딪히는 순간 바로 길을 돌아가기 때문에, 현재 카운트에 +1한 값을 저장하고 loop 종료
+						score = (score-1)*2 + 1;
+						terminated = true;
 						break;
 						
-					case 6: // 6~10은 웜홀 이동, 한번에 default로 처리
+					default: // 6~10은 웜홀 이동, 한번에 default로 처리
 						int wdx = controller - 6; // worm hole index
-						// 반대편 웜홀로 이동
-						nr = (nr == wormhole[wdx][0]) ? wormhole[wdx][2] : wormhole[wdx][0];
-						nc = (nc == wormhole[wdx][1]) ? wormhole[wdx][3] : wormhole[wdx][1];
-						break;	
-						
-					case 7: // 6~10은 웜홀 이동, 한번에 default로 처리
-						wdx = controller - 6; // worm hole index
-						// 반대편 웜홀로 이동
-						nr = (nr == wormhole[wdx][0]) ? wormhole[wdx][2] : wormhole[wdx][0];
-						nc = (nc == wormhole[wdx][1]) ? wormhole[wdx][3] : wormhole[wdx][1];
-						break;	
-						
-					case 8: // 6~10은 웜홀 이동, 한번에 default로 처리
-						wdx = controller - 6; // worm hole index
-						// 반대편 웜홀로 이동
-						nr = (nr == wormhole[wdx][0]) ? wormhole[wdx][2] : wormhole[wdx][0];
-						nc = (nc == wormhole[wdx][1]) ? wormhole[wdx][3] : wormhole[wdx][1];
-						break;	
-						
-					case 9: // 6~10은 웜홀 이동, 한번에 default로 처리
-						wdx = controller - 6; // worm hole index
-						// 반대편 웜홀로 이동
-						nr = (nr == wormhole[wdx][0]) ? wormhole[wdx][2] : wormhole[wdx][0];
-						nc = (nc == wormhole[wdx][1]) ? wormhole[wdx][3] : wormhole[wdx][1];
-						break;	
-						
-					case 10: // 6~10은 웜홀 이동, 한번에 default로 처리
-						wdx = controller - 6; // worm hole index
 						// 반대편 웜홀로 이동
 						nr = (nr == wormhole[wdx][0]) ? wormhole[wdx][2] : wormhole[wdx][0];
 						nc = (nc == wormhole[wdx][1]) ? wormhole[wdx][3] : wormhole[wdx][1];
