@@ -68,29 +68,31 @@ public class Solution {
 			}
 			
 			// 맞은 벽돌이 값이 1이면 그거만 깨고 종료
-			// 그 외 벽돌에 닿으면 폭파 알고리즘 on
 			if (newMap[cr][cc] == 1) {
 				newMap[cr][cc] = 0; 
-			} else 
+			} else {
+
+				// 그 외 벽돌에 닿으면 벽돌 깨기 알고리즘 on
 				bomb(cr, cc, newMap);
-			
-			// 다 깨졌으면 깨진부분 채우기
-			for (int fc = 0; fc < W; fc++) { // fix column
-				for (int fr = H-1; fr >= 0; fr--) { // fix row
-					
-					// 이미 깨져서 빈 부분 스킵
-					if (newMap[fr][fc] == 0) continue;
-					
-					// 아래에서부터 떠있는 벽돌 아래로 끌어 맞추기
-					int bdx = fr; // brick index;
-					while (bdx < H-1 && newMap[bdx+1][fc] == 0) {
-						newMap[bdx+1][fc] = newMap[bdx][fc];
-						newMap[bdx][fc] = 0; 
-						bdx++;
+				
+				// 다 깨졌으면 깨진부분 채우기
+				for (int fc = 0; fc < W; fc++) { // fix column
+					for (int fr = H-1; fr >= 0; fr--) { // fix row
+						
+						// 이미 깨져서 빈 부분 스킵
+						if (newMap[fr][fc] == 0) continue;
+						
+						// 아래에서부터 떠있는 벽돌 아래로 끌어 맞추기
+						int bdx = fr; // brick index;
+						while (bdx < H-1 && newMap[bdx+1][fc] == 0) {
+							newMap[bdx+1][fc] = newMap[bdx][fc];
+							newMap[bdx][fc] = 0; 
+							bdx++;
+						}
 					}
 				}
 			}
-			
+				
 			// 깨고 나서는 다음 구슬 위치 선택을 위해 이동
 			selectLine(cnt+1, newMap);
 		}
@@ -117,6 +119,9 @@ public class Solution {
 				
 				// index를 벗어나면 스킵
 				if (nr >= H || nc >= W || nr < 0 || nc < 0) continue;
+				
+				// 이미 값이 0이면 스킵
+				if (map[nr][nc] == 0) continue;
 				
 				// 재귀호출을 통해 연쇄적으로 벽돌깨기 on
 				bomb(nr, nc, map);
