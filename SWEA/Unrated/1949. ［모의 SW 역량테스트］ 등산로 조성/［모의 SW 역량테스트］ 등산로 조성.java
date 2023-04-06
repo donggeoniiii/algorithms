@@ -30,7 +30,7 @@ public class Solution {
 	 * @param c 현재 column
 	 * @param length 현재까지 이동 거리, 1부터 시작해야
 	 */
-	static void DFS(int cr, int cc, int curHeight, int curLength, boolean reduced) {
+	static void DFS(int cr, int cc, int curLength, boolean reduced) {
 		// 현재까지 저장된 길이와 저장된 최댓값 비교하기
 		maxLength = Math.max(maxLength, curLength);
 		
@@ -54,7 +54,7 @@ public class Solution {
 				// 방문 체크
 				visited[nr][nc] = true;
 				
-				DFS(nr, nc, mountain[nr][nc], curLength+1, reduced);
+				DFS(nr, nc, curLength+1, reduced);
 				
 				// 방문 체크 해제
 				visited[nr][nc] = false;
@@ -69,7 +69,7 @@ public class Solution {
 				visited[nr][nc] = true;
 				
 				// 이미 깎아봤다고 표시하고 넘어가기
-				DFS(nr, nc, curHeight-1, curLength+1, true);
+				DFS(nr, nc, curLength+1, true);
 				
 				// 방문 체크 해제
 				visited[nr][nc] = false;
@@ -144,7 +144,7 @@ public class Solution {
 				visited[cr][cc] = true;
 				
 				// DFS on
-				DFS(cr, cc, mountain[cr][cc], 1, false);
+				DFS(cr, cc, 1, false);
 
 			}
 
