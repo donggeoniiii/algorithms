@@ -1,5 +1,6 @@
+// 치킨배달
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -14,7 +15,7 @@ public class Main {
 	static int[][] city;
 	
 	// 치킨집의 위치를 저장하는 map
-	static HashMap<Integer, int[]> stores;
+	static ArrayList<int[]> stores;
 
 	// 치킨거리 합
 	static int minTotal;
@@ -102,16 +103,15 @@ public class Main {
 		
 		
 		// 자료구조 선언
-		stores = new HashMap<>();
+		stores = new ArrayList<>();
 		
 		// 도시 정보 입력하면서 치킨집 주소 알아놓기
-		int idx = 0;
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < N; c++) {
 				city[r][c] = input.nextInt(); 
 				
 				if (city[r][c] == 2)
-					stores.put(idx++, new int[] {r,c});
+					stores.add(new int[] {r,c});
 			}
 		}
 		
