@@ -13,9 +13,6 @@ public class Main {
 	// 도시 배열
 	static int[][] city;
 	
-	// 살려둘 치킨집 좌표를 저장하는 queue
-	static ArrayList<Integer> remains;
-	
 	// 치킨집의 위치를 저장하는 map
 	static HashMap<Integer, int[]> stores;
 
@@ -24,7 +21,8 @@ public class Main {
 	
 
 	// 치킨 거리 구하기 전, 남겨둘 치킨집 구하기 알고리즘
-	static void remain(int cnt, int start) {
+	static void remain(int cnt, int start, int[] curSelected) {
+		
 		// base case
 		// M개의 살려둘 집을 고르고 나면 
 		if (cnt == M) {
@@ -35,7 +33,7 @@ public class Main {
 				for (int c = 0; c < N; c++) {
 					
 					if (city[r][c] == 1) 
-						curTotal += dist(r, c);
+						curTotal += dist(r, c, curSelected);
 					
 				}
 			}
@@ -50,49 +48,38 @@ public class Main {
 		// recursive case
 		// 살려둘 집, 죽일 집 고르기
 		for (int i = start; i < stores.size(); i++) {
-			
-			// 선택 안함, 다음으로 이동
-			remain(cnt, i+1);
 
 			// 선택함
-			int cr = stores.get(i)[0];
-			int cc = stores.get(i)[1];
-			remains.add(cr);
-			remains.add(cc);
+			curSelected[cnt] = i;
 			
 			// 골라놓고 다음으로 이동, 겹치지 않게 현재 고른 값보다 1 큰데서 시작하게 시작값 전달
-			remain(cnt+1, i+1);
-			
-			// 선택했으니 다른 고르는 경우를 위해 다시 빼기
-			remains.remove(remains.size()-1);
-			remains.remove(remains.size()-1);
+			remain(cnt+1, i+1, curSelected);
 		}
 	}
 	
 	
 	// 치킨 거리 구하기 알고리즘
-	static int dist(int cr, int cc) {
+	static int dist(int cr, int cc, int[] selected) {
 
 		// 제일 가까운 치킨집까지 맨해튼 거리
 		int mindist = Integer.MAX_VALUE;
 
 		// 마지막 치킨집에 방문할 때까지
-		int idx = 0;
-		while (idx < remains.size()) {
-			// 새로운 좌표
-			int tr = remains.get(idx++);
-			int tc = remains.get(idx++);
+		for (int i = 0; i < M; i++) {
+			int idx = selected[i];
 			
-			// 거리 차 구하기
-			int dr = Math.abs(tr - cr);
-			int dc = Math.abs(tc - cc);
+			int tr = stores.get(idx)[0];
+			int tc = stores.get(idx)[1];
+			
+			// 거리 계산
+			int nr = Math.abs(tr - cr);
+			int nc = Math.abs(tc - cc);
 			
 			// 최솟값 갱신
-			mindist = Math.min(mindist, dr+dc);
+			mindist = Math.min(mindist, nr+nc);
 			
-			// 만약 최단거리가 1이 되면 더 보지 말고 종료
-			if (mindist == 1)
-				break;
+			// 최솟값이 1이 되면 종료
+			if (mindist == 1) break;
 		}
 		
 		
@@ -109,11 +96,12 @@ public class Main {
 		// 살릴 치킨집 수
 		M = input.nextInt();
 		
-		// 도시 크기 입력
+		// 배열 크기 입력
 		city = new int[N][N];
+		int[] selected = new int[M];
+		
 		
 		// 자료구조 선언
-		remains = new ArrayList<>();
 		stores = new HashMap<>();
 		
 		// 도시 정보 입력하면서 치킨집 주소 알아놓기
@@ -131,7 +119,7 @@ public class Main {
 		minTotal = Integer.MAX_VALUE;
 		
 		// 치킨집 고르고 거리 구하기
-		remain(0, 0);
+		remain(0, 0, selected);
 		
 		// 정답 출력
 		System.out.println(minTotal);
