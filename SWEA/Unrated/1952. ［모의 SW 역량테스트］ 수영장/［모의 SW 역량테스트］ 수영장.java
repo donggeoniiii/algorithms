@@ -1,4 +1,4 @@
-// 수영장(re)
+// 수영장(DP)
 
 import java.util.Scanner;
 
@@ -12,40 +12,6 @@ public class Solution {
 	
 	// 최소비용
 	static int minCost;
-	
-	// 백트래킹 알고리즘
-	static void swimmingFee(int cnt, int cost) {
-		
-		// pruning: 현재까지 비용합보다 최소비용이 더 작으면 더 고려할 필요 없음
-		if (minCost < cost)
-			return;
-		
-		// base case: 12월까지 다 고려하고 나면 종료
-		if (cnt >= 12) {
-			
-			// 최솟값과 비교, 갱신
-			minCost = Math.min(minCost, cost);
-			
-			return;
-		}
-		
-		
-		// recursive case: 연간 금액을 제외한 3개 중 선택
-		for (int i = 0; i < 3; i++) {
-			switch (i) {
-			case 0: // 1일치
-				swimmingFee(cnt+1, cost + month[cnt]*daily);
-				break;
-			case 1: // 1달치
-				swimmingFee(cnt+1, cost + monthly);
-				break;
-			case 2: // 3달치
-				swimmingFee(cnt+3, cost + quarter);
-				break;
-			}
-		}
-		
-	}
 	
 	
 	public static void main(String[] args) {
@@ -64,15 +30,35 @@ public class Solution {
 			annual = input.nextInt();
 			
 			// 12개월 이용 계획
-			month = new int[12];
-			for (int idx = 0; idx < 12; idx++) 
+			month = new int[13];
+			
+			// n월까지 금액합
+			int[] totalCost = new int[13];
+			
+			month[0] = 0;
+			for (int idx = 1; idx <= 12; idx++) 
 				month[idx] = input.nextInt(); 
 			
 			// 최솟값은 1년치로 초기화(갱신 안되면 얘가 최소)
 			minCost = annual;
 			
+			// 1월달은 이렇게
+			totalCost[0] = 0;
+			totalCost[1] = totalCost[0] + Math.min(daily * month[1], monthly);
+			
 			// 최소비용 찾기
-			swimmingFee(0, 0);
+			for (int idx = 1; idx <= 12; idx++) {
+				// n월달까지 합 = n-1월까지 합 + min(한달치, 하루치*사용일수)
+				totalCost[idx] = Math.min(totalCost[idx-1] + month[idx]*daily, totalCost[idx-1] + monthly);
+				
+				// 만약 3월 이후라면 n월달까지 합 = 위에서 구한 최솟값과 3달전까지 합 + 3달치 금액
+				if (idx >= 3) {
+					totalCost[idx] = Math.min(totalCost[idx], totalCost[idx-3]+quarter);
+				}
+			}
+			
+			// 1년치와 비용 비교
+			minCost = Math.min(totalCost[12], annual);
 			
 			// 정답 추가
 			sb.append("#").append(tc).append(" ").append(minCost).append("\n");
