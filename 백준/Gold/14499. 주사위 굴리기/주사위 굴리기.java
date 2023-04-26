@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
+		StringBuilder sb = new StringBuilder();
 		
 		// 지도의 크기
 		int N = input.nextInt();
@@ -103,7 +104,7 @@ public class Main {
 				}
 				
 				// 결과 출력하고
-				System.out.println(dice[1]);
+				sb.append(dice[1]).append("\n");
 				
 				// 이동한 좌표 반영하기
 				x = nx;
@@ -113,6 +114,9 @@ public class Main {
 				K--;
 			}
 		}
+		
+		// 정답 출력
+		System.out.println(sb.toString());
 		
 		input.close();
 	}
