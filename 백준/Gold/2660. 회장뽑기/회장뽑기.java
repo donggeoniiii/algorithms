@@ -7,32 +7,32 @@ import java.util.Scanner;
 public class Main {
     // 회원수
     static int n;
-    
+
     // 인접배열, 거리 저장
     static int[][] adj;
 
     // 초기화용 거리
     static final int INF = 99999;
 
-    // 각 회원까지 거리합
-    static int[] totalDist;
-    
+    // 각 회원별 점수
+    static int[] points;
+
     // 회원 후보
     static ArrayList<Integer> candidates;
-    
+
     // 회장 점수(최솟값)
     static int minPoint;
-    
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         StringBuilder sb = new StringBuilder();
 
         // 회원수
         n = input.nextInt();
-        
+
         // 배열 초기화
         adj = new int[n+1][n+1];
-        totalDist = new int[n+1];
+        points = new int[n+1];
         candidates = new ArrayList<>();
         minPoint = Integer.MAX_VALUE;
 
@@ -49,7 +49,7 @@ public class Main {
         while (!terminated){
             int src = input.nextInt();
             int dest = input.nextInt();
-            
+
             // 만약 입력값이 -1 -1 이면
             if (src == -1 && dest == -1)
                 // 즉시 종료
@@ -60,12 +60,12 @@ public class Main {
                 adj[dest][src] = 1;
             }
         }
-        
-        // floyd-warshall : 경유지 정해놓고 최소거리 찾기
+
+        // floyd-warshall : 모든 정점에서 모든 정점간의 최소거리 찾기
         for (int joint = 1; joint <= n; joint++) {
             for (int src = 1; src <= n; src++) {
                 for (int dest = 1; dest <= n; dest++) {
-                    // 최소거리 비교해서 넣기
+                    // 경로별 최소거리 비교해서 넣기
                     adj[src][dest] = Math.min(adj[src][dest], adj[src][joint] + adj[joint][dest]);
                 }
             }
@@ -76,27 +76,29 @@ public class Main {
             for (int dest = 1; dest <= n; dest++){
                 // 길이 없는 경우가 아닐 때만
                 if (adj[src][dest] != INF)
-                    totalDist[src] = Math.max(totalDist[src], adj[src][dest]);
+                    points[src] = Math.max(points[src], adj[src][dest]);
             }
         }
         // 최솟값 찾기
         for (int person = 1; person <= n; person++){
             // 최솟값이 갱신되면
-            if (totalDist[person] < minPoint){
+            if (points[person] < minPoint){
                 // 후보목록 초기화 후 해당 후보 회장후보에 추가
                 candidates.clear();
                 candidates.add(person);
-                
+
                 // 최솟값 갱신
-                minPoint = totalDist[person];
+                minPoint = points[person];
             }
-            
+
             // 최솟값과 같으면
-            else if (totalDist[person] == minPoint)
+            else if (points[person] == minPoint)
                 // 후보 추가
                 candidates.add(person);
+
+            // else { continue; }
         }
-        
+
         // 정답 형식대로 저장
         sb.append(minPoint).append(" ").append(candidates.size()).append("\n");
         for (int candidate : candidates)
