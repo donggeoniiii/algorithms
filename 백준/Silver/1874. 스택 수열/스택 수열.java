@@ -39,8 +39,6 @@ public class Main {
             }
             // 만약 다르다면 출력값에 no 넣고 종료
             else {
-                sb = new StringBuilder();
-                sb.append("NO");
                 System.out.println("NO");
                 return;
             }
