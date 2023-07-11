@@ -13,6 +13,7 @@ public class Main {
 
         // 집어넣을 stack
         Stack<Integer> stack = new Stack<>();
+        int[] stackArr = new int[N];
 
         // 값과 비교해보며 가능한지 확인
         int max = 0;
@@ -40,7 +41,8 @@ public class Main {
             else {
                 sb = new StringBuilder();
                 sb.append("NO");
-                break;
+                System.out.println("NO");
+                return;
             }
         }
 
