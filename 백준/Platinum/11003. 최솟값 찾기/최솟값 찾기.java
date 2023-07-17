@@ -1,17 +1,15 @@
 // 최솟값 찾기
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringBuilder sb = new StringBuilder();
 
 		// 숫자 개수 N
 		// 부분최소를 정할 range L
@@ -43,13 +41,13 @@ public class Main {
 			}
 
 			// 최솟값 입력
-			bw.write(deque.peekFirst()[1] + " ");
-
+			sb.append(deque.peekFirst()[1]).append(" ");
+    
+            // 다음 index로 이동
 			idx++;
 		}
 
 		// 정답 출력
-		bw.flush();
-		bw.close();
+		System.out.println(sb);
 	}
 }
