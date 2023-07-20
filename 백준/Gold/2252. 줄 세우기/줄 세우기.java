@@ -1,9 +1,12 @@
 // 줄 세우기
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 	static StringBuilder sb = new StringBuilder();
@@ -47,17 +50,13 @@ public class Main {
 		}
 	}
 
-	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		// 사람의 수
-		n = input.nextInt();
-
-		// 자기보다 키 작은 사람의 수 카운트 배열
-		shorterCnt = new int[n + 1];
-
-		// 키 비교 데이터의 수
-		m = input.nextInt();
+		// 사람의 수, 키 비교 데이터의 수
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 
 		// 키가 큰 사람의 이름을 저장할 인접리스트
 		adj = new LinkedList[n + 1];
@@ -65,10 +64,14 @@ public class Main {
 			adj[i] = new LinkedList<>();
 		}
 
+		// 자기보다 키 작은 사람의 수 카운트 배열
+		shorterCnt = new int[n + 1];
+
 		// 입력
 		for (int i = 0; i < m; i++) {
-			int shorter = input.nextInt();
-			int taller = input.nextInt();
+			st = new StringTokenizer(br.readLine());
+			int shorter = Integer.parseInt(st.nextToken());
+			int taller = Integer.parseInt(st.nextToken());
 
 			// 데이터 저장
 			adj[shorter].add(taller);
