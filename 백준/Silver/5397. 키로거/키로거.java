@@ -35,7 +35,7 @@ public class Main {
 				else if (commands[j] == '>') {
 					// 커서가 입력한 문자 개수와 같으면 더 못감
 					if (!curRight.isEmpty()) {
-						// 다른 경우는 커서 한쪽 움직임을 표현하기 위해, 왼쪽 deque에서 오른쪽 deque로 추가
+						// 다른 경우는 커서 한쪽 움직임을 표현하기 위해, 오른쪽 deque에서 왼쪽 deque로 추가
 						curLeft.offerLast(curRight.pollFirst());
 					}
 				}
@@ -49,7 +49,7 @@ public class Main {
 				}
 				// 4. input이 그냥 문자일 때
 				else {
-					// 커서 오른쪽에 입력
+					// 커서 왼쪽에 입력
 					curLeft.offerLast(commands[j]);
 				}
 			}
