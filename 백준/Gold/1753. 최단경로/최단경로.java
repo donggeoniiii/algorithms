@@ -88,6 +88,10 @@ public class Main {
 			// 탐색지점 가져오기
 			Edge curEdge = queue.poll();
 
+			// 만약 현재 지점까지 가중치보다 최단거리가 더 짧은 경우면 스킵
+			if (curEdge.weight > minDist[curEdge.next])
+				continue;
+
 			// 이어지는 애들 가져오기
 			for (Edge nextEdge : adj[curEdge.next]) {
 
@@ -104,10 +108,7 @@ public class Main {
 
 		// 출력
 		for (int i = 1; i <= V; i++) {
-			if (minDist[i] != INF)
-				sb.append(minDist[i]).append("\n");
-			else
-				sb.append("INF").append("\n");
+			sb.append(minDist[i] == INF ? "INF" : minDist[i]).append("\n");
 		}
 		System.out.println(sb);
 	}
