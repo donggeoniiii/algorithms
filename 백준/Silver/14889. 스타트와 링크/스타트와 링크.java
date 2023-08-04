@@ -13,7 +13,7 @@ public class Main {
 	static int[][] stat;
 
 	// 스타트 팀 멤버
-	static int[] selected;
+	static boolean[] selected;
 
 	// 전체 스탯 합
 	static int statTotal;
@@ -30,40 +30,21 @@ public class Main {
 		// base case: n/2명 스타트팀에서 다 뽑으면
 		if (cnt == n / 2) {
 			// 스타트 팀 점수 계산
-			int score = 0;
-			boolean[] isStartTeam = new boolean[n];
-			for (int i = 0; i < n / 2; i++) {
-				for (int j = i + 1; j < n / 2; j++) {
-					int a = selected[i];
-					int b = selected[j];
+			int startTeamScore = 0;
+			int linkTeamScore = 0;
+			for (int i = 0; i < n - 1; i++) {
+				for (int j = i; j < n; j++) {
+					// 선택했으면 스타트 팀, 아니면 링크 팀
+					if (selected[i] && selected[j])
+						startTeamScore += stat[i][j] + stat[j][i];
 
-					// 링크팀도 누군지 알아야 하니까
-					isStartTeam[a] = true;
-					isStartTeam[b] = true;
-					score += stat[a][b] + stat[b][a];
-				}
-			}
-
-			// 링크 팀 점수 계산
-			int[] notSelected = new int[n / 2];
-			int idx = 0;
-			int opposite = 0;
-			for (int i = 0; i < n; i++) {
-				if (!isStartTeam[i]) {
-					notSelected[idx++] = i;
-				}
-			}
-			for (int i = 0; i < n / 2; i++) {
-				for (int j = i + 1; j < n / 2; j++) {
-					int a = notSelected[i];
-					int b = notSelected[j];
-
-					opposite += stat[a][b] + stat[b][a];
+					if (!selected[i] && !selected[j])
+						linkTeamScore += stat[i][j] + stat[j][i];
 				}
 			}
 
 			// 점수 차이 계산
-			int curGap = Math.abs(opposite - score);
+			int curGap = Math.abs(startTeamScore - linkTeamScore);
 
 			// 최솟값 갱신
 			shortestGap = Math.min(curGap, shortestGap);
@@ -74,10 +55,13 @@ public class Main {
 		// recursive case
 		for (int i = start; i < n; i++) {
 			// 선택
-			selected[cnt] = i;
+			selected[i] = true;
 
 			// 다음 선택을 위해 이동
 			findShortestStatGap(cnt + 1, i + 1);
+
+			// 다음 선택을 위해 취소
+			selected[i] = false;
 		}
 	}
 
@@ -98,7 +82,7 @@ public class Main {
 		}
 
 		// 탐색을 위한 변수, 배열 초기화
-		selected = new int[n / 2];
+		selected = new boolean[n];
 		shortestGap = Integer.MAX_VALUE;
 
 		// 최소차이 찾기
