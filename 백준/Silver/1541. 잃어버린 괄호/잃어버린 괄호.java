@@ -32,7 +32,6 @@ public class Main {
 		}
 
 		// 연산자 하나씩 보면서 확인하기
-		boolean noMinus = true;
 		int result = 0;
 		int curSum = 0;
 		while (!stack.isEmpty()) {
@@ -42,7 +41,6 @@ public class Main {
 
 			// 문자열이 -면
 			if (cur.equals("-")) {
-				noMinus = false;
 
 				// 그전까지 합산한 값만큼 빼기
 				result -= curSum;
