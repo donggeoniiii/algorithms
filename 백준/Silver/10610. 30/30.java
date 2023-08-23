@@ -3,39 +3,39 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.PriorityQueue;
+import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		// 배열을 입력 받을 priorityQueue
-		PriorityQueue<Integer> queue = new PriorityQueue<>(Collections.reverseOrder());
+		// 지나가다 본 값
+		String line = br.readLine();
 
+		// 각 자릿수를 입력 받을 배열
+		char[] digit = line.toCharArray();
+
+		// 정렬
+		Arrays.sort(digit);
+		
 		// 주어진 수의 자릿수 합
 		int sum = 0;
 
 		// 0이 하나라도 있는지 확인하는 변수
-		boolean hasZero = false;
+		boolean hasZero = (digit[0] == '0');
 
-		// 값 입력받기
-		String line = br.readLine();
+		// 30으로 나누어지는지 확인
 		for (int i = 0; i < line.length(); i++) {
-			int num = line.charAt(i) - '0';
+			int num = digit[i] - '0';
 
-			// 0 있는지 체크
-			if (num == 0)
-				hasZero = true;
 			sum += num;
-			queue.offer(num);
 		}
 
 		// 만약 0이 있고 3으로 나누어 떨어지면
 		if (hasZero && sum % 3 == 0) {
 			StringBuilder sb = new StringBuilder();
-			while (!queue.isEmpty()) {
-				sb.append(queue.poll());
+			for (int idx = 0; idx < digit.length; idx++) {
+				sb.append(digit[digit.length - 1 - idx] - '0');
 			}
 			// 정답 출력
 			System.out.println(sb);
