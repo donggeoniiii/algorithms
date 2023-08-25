@@ -3,7 +3,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -17,26 +16,17 @@ public class Main {
 
 		int b = Integer.parseInt(st.nextToken());
 
-		// 수 변환을 위한 hashmap
-		HashMap<Character, Integer> trans = new HashMap<>();
-
-		// 입력
-		char idx = 'A';
-		for (int i = 10; i < 36; i++) {
-			trans.put(idx++, i);
-		}
-
 		// 변환해서 계산
 		int sum = 0;
 		for (int i = 0; i < n.length(); i++) {
 			char digit = n.charAt(i);
 			int num;
 
-			// 자릿값이 숫자가 아니면 해시맵 이용해서 변환
+			// 자릿값이 숫자가 아니면 아스키 코드값 참고해서 변환
 			if (digit > '9') {
-				num = trans.get(digit);
+				num = digit - 'A' + 10;
 			}
-			// 0~9면 그대로
+			// 0~9면 하던 대로
 			else {
 				num = digit - '0';
 			}
