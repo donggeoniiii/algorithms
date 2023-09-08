@@ -13,12 +13,12 @@ public class Main {
 	// find 연산을 위한 rank 저장 배열
 	static int[] rank;
 
-	// find 연산
+	// find 연산(경로압축)
 	static int findParent(int a) {
-		if (parent[a] != a)
-			return findParent(parent[a]);
+		if (parent[a] == a)
+			return parent[a];
 		else
-			return a;
+			return parent[a] = findParent(parent[a]);
 	}
 
 	public static void main(String[] args) throws IOException {
