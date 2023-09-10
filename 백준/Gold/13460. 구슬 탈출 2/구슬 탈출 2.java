@@ -56,10 +56,6 @@ public class Main {
 			int bluecr = cur.br;
 			int bluecc = cur.bc;
 
-			// 이동횟수가 이미 10번이면 스킵
-			if (cur.move >= 10)
-				continue;
-
 			// 델타 탐색
 			for (int dt = 0; dt < 4; dt++) {
 				int rednr = redcr;
@@ -107,41 +103,16 @@ public class Main {
 
 				// 이동 이후 두 구슬의 위치가 같으면, 시작지점 기준으로 조정
 				if (rednr == bluenr && rednc == bluenc) {
-					// 아래 -> 위인 경우(0)
-					if (dt == 0) {
-						// 시작점이 아래였던 애가 한 칸 아래로
-						if (redcr < bluecr) {
-							bluenr -= dr[dt];
-						} else {
-							rednr -= dr[dt];
-						}
-					}
-					// 위 -> 아래인 경우
-					else if (dt == 1) {
-						// 시작점이 위였던 애가 한 칸 위로
-						if (redcr < bluecr) {
-							rednr -= dr[dt];
-						} else {
-							bluenr -= dr[dt];
-						}
-					}
-					// 오른쪽 -> 왼쪽인 경우
-					else if (dt == 2) {
-						// 시작점이 오른쪽이던 애가 한칸 오른쪽으로
-						if (redcc < bluecc) {
-							bluenc -= dc[dt];
-						} else {
-							rednc -= dc[dt];
-						}
-					}
-					// 왼쪽 -> 오른쪽인 경우
-					else {
-						// 시작점이 왼쪽이던 애가 한칸 왼쪽으로
-						if (redcc < bluecc) {
-							rednc -= dc[dt];
-						} else {
-							bluenc -= dc[dt];
-						}
+					// 구슬 별 이동거리
+					int redDist = Math.abs(redcr - rednr + redcc - rednc);
+					int blueDist = Math.abs(bluecr - bluenr + bluecc - bluenc);
+					// 이동거리가 더 긴 구슬이 한칸 뒤로 물러나기
+					if (redDist > blueDist) {
+						rednr -= dr[dt];
+						rednc -= dc[dt];
+					} else {
+						bluenr -= dr[dt];
+						bluenc -= dc[dt];
 					}
 				}
 
@@ -153,7 +124,7 @@ public class Main {
 			}
 		}
 
-		// 탈출 지점을 10번 안에 못 찾았으면 fail
+		// 탈출 지점을 결국 못 찾고 탐색이 끝났으면 fail
 		return -1;
 	}
 
@@ -192,6 +163,9 @@ public class Main {
 		int answer = findFastestEta(rsr, rsc, bsr, bsc);
 
 		// 정답 출력
-		System.out.println(answer);
+		if (answer == -1 || answer > 10)
+			System.out.println(-1);
+		else
+			System.out.println(answer);
 	}
 }
