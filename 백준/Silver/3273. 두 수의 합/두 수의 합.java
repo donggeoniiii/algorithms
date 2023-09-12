@@ -3,7 +3,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -15,32 +15,44 @@ public class Main {
 
 		// 수열 입력하면서 최댓값 찾기
 		int[] input = new int[n];
-		HashSet<Integer> nums = new HashSet<>();
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int idx = 0; idx < n; idx++) {
 			input[idx] = Integer.parseInt(st.nextToken());
-			nums.add(input[idx]);
 		}
 
 		// 합해서 나와야 하는 값
 		int x = Integer.parseInt(br.readLine());
 
-		// 수열의 크기가 1인 경우는 자명함
-		if (n == 1) {
-			System.out.println(0);
-		} else {
-			// 수 등장 여부를 가지고 카운트하기
-			int answer = 0;
+		// 순서쌍 개수
+		int answer = 0;
 
-			// a + b = x를 만족하는 (a,b)를 찾으려면, a가 있을 떄 x-a도 있으면 되니까
-			for (int i = 0; i < n; i++) {
-				if (nums.contains(x - input[i])) {
-					answer++;
-				}
+		// 수월한 탐색을 위한 정렬
+		Arrays.sort(input);
+
+		// 투포인터
+		int idx1 = 0;
+		int idx2 = n - 1;
+
+		// 두 포인터가 교차하기 전까지
+		while (idx1 < idx2) {
+			// 두 index가 가리키는 배열의 값
+			int sum = input[idx1] + input[idx2];
+
+			// 두 수의 합이 원하는 값보다 작으면 앞에 포인터 땡기기
+			if (sum < x)
+				idx1++;
+				// 두 수의 합이 원하는 값보다 크면 뒤 포인터 앞으로 땡기기
+			else if (sum > x)
+				idx2--;
+				// 만약 같으면 정답 추가, 두 카운터 다 움직이기(하나 고정할 필요 없음, 어차피 서로 다른 수들이라 안나옴)
+			else {
+				answer++;
+				idx1++;
+				idx2--;
 			}
-
-			// 정답 출력
-			System.out.println(answer / 2);
 		}
+
+		// 정답 출력
+		System.out.println(answer);
 	}
 }
