@@ -1,10 +1,6 @@
-// 수 찾기
+// 수 찾기(입력메소드 성능 테스트)
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
 	static int[] nums;
@@ -44,33 +40,38 @@ public class Main {
 
 	}
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	private static int readInt() throws Exception {
+		int input, output = 0;
+		while (!((input = System.in.read()) == 10 || input == 13 || input == 32)) {
+			output = (output << 3) + (output << 1) + (input & 15);
+		}
 
+		return output;
+	}
+
+	public static void main(String[] args) throws Exception {
 		// 주어지는 수의 개수
-		int n = Integer.parseInt(br.readLine());
+		int n = readInt();
 
 		// 배열에 저장
 		nums = new int[n];
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
-			nums[i] = Integer.parseInt(st.nextToken());
+			nums[i] = readInt();
 		}
 
 		// 이분탐색을 위해 정렬
 		Arrays.sort(nums);
 
 		// 찾으려는 수의 개수
-		int m = Integer.parseInt(br.readLine());
+		int m = readInt();
 
 		// 정답 형태 생성
 		StringBuilder sb = new StringBuilder();
 
 		// 찾으려는 수 입력하면서 존재하는지 찾기
-		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < m; i++) {
-			sb.append(isExist(Integer.parseInt(st.nextToken()))).append("\n");
+			sb.append(isExist(readInt())).append("\n");
 		}
 
 		// 정답 출력
