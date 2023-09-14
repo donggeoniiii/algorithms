@@ -3,7 +3,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -14,18 +13,15 @@ public class Main {
 		// 카드 개수 입력
 		int n = Integer.parseInt(br.readLine());
 
-		// 숫자 카드 정보 담을 해시맵
-		HashMap<Integer, Integer> numCards = new HashMap<>();
+		// 숫자 카드 정보 담을 배열
+		int[] numCard = new int[20000001];
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		for (int i = 1; i <= n; i++) {
 			// 이번에 확인할 숫자
 			int num = Integer.parseInt(st.nextToken());
 
-			// 이전 카운트 불러와서
-			int prev = numCards.getOrDefault(num, 0);
-
-			// 하나 증가한 값으로 변경
-			numCards.put(num, prev + 1);
+			// 카운트 체크
+			numCard[num + 10000000]++;
 		}
 
 		// m개의 정수에 대해, 해당 카드가 있는지 검사
@@ -41,7 +37,7 @@ public class Main {
 			int num = Integer.parseInt(st.nextToken());
 
 			// 결과 입력
-			sb.append(numCards.getOrDefault(num, 0)).append("\n");
+			sb.append(numCard[num + 10000000]).append("\n");
 		}
 
 		// 출력
