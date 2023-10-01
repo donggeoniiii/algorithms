@@ -1,23 +1,39 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Hashtable;
+// 비밀번호 찾기
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) throws Exception {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-		Hashtable<String, String> ht = new Hashtable<>();
-		
-		String[] input = bf.readLine().split(" ");
-		int n = Integer.parseInt(input[0]);
-		int searchNum = Integer.parseInt(input[1]);
-		
-		for(int i=0; i<n; i++) {
-			String[] info = bf.readLine().split(" ");
-			ht.put(info[0], info[1]);
-		}
-		
-		for(int i=0; i<searchNum; i++) {
-			System.out.println(ht.get(bf.readLine()));
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        // 전체 사이트 개수, 문제 수
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+
+        // 비밀번호 저장하는 해시맵
+        HashMap<String, String> passwords = new HashMap<>();
+
+        // 비밀번호 저장
+        for (int i = 0; i < n; i++) {
+            // 사이트 이름, 아이디
+            st = new StringTokenizer(br.readLine());
+            String site = st.nextToken();
+            String id = st.nextToken();
+
+            passwords.put(site, id);
+        }
+
+        // 정답 출력
+        for (int i = 0; i < m; i++) {
+            String site = br.readLine();
+            bw.write(passwords.get(site));
+            bw.write("\n");
+        }
+        bw.flush();
+        bw.close();
+    }
 }
