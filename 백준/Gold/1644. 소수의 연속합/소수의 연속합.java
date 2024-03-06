@@ -56,22 +56,22 @@ public class Main {
 
 		// 현재까지 구한 수열의 부분합
 		int curSum = 0;
-		boolean terminated = false;
-		while (!terminated) {
-			// 아직 구하려는 수보다 작으면, 다음 소수까지 합산
-			if (curSum <= n) {
-				curSum += primeNums.get(end++);
-			}
-			// 구하려는 수보다 크면 이제 다른 경우를 찾아야 하므로 시작점부터 하나씩 빼보기
-			if (curSum > n) {
+		while (true) {
+			// 구하려는 수보다 크거나 같으면 start 포인터를 옮기며 새로운 조합 찾기
+			if (curSum >= n) {
 				curSum -= primeNums.get(start++);
 			}
+			// 구하려는 수보다 작을 때는 2가지 경우가 있다
 			// 포인터를 옮겼는데 마지막 소수까지 탐색이 끝났으면 종료
-			if (end == primeNums.size()) {
-				terminated = true;
+			else if (end == primeNums.size()) {
+				break;
+			}
+			// 아직 end 포인트가 도달할 지점이 남았으면 end 포인터를 옮기며 합산
+			else {
+				curSum += primeNums.get(end++);
 			}
 
-			// 합이 우리가 찾는 수면 카운트 증가
+			// 이번 시행 후에 합이 우리가 찾는 수면 카운트 증가
 			if (curSum == n) {
 				answer++;
 			}
