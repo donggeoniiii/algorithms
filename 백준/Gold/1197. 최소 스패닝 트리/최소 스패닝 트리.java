@@ -93,7 +93,7 @@ public class Main {
 
 		// 시작 정점부터 탐색
 		int totalWeight = 0;
-		int nodeCnt = 0;
+		int edgeCnt = 0;
 		while (!queue.isEmpty()) {
 			Edge curEdge = queue.poll();
 
@@ -106,10 +106,10 @@ public class Main {
 			totalWeight += curEdge.weight;
 
 			// 간선 카운트 증가
-			nodeCnt++;
+			edgeCnt++;
 
 			// 만약 선택한 간선 개수가 v-1개면 신장 트리 완성
-			if (nodeCnt == v-1) {
+			if (edgeCnt == v-1) {
 				break;
 			}
 		}
