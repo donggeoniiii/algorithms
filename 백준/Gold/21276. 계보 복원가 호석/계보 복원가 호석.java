@@ -25,11 +25,14 @@ public class Main {
 	// 정보의 개수
 	static int m;
 
-	// 자식 리스트(연결리스트)
+	// 자손 리스트
 	static List<Integer>[] adj;
 
-	// 시조(==root) 반별을 위한 indegree 배열
+	// 시조 판별과 직속 자손 확인을 위한 indegree 배열
 	static int[] indegree;
+
+	// 자식들 저장할 리스트
+	static List<String>[] children;
 
 	public static void main(String[] args) throws IOException {
 		input();
@@ -62,9 +65,9 @@ public class Main {
 			adj[i] = new ArrayList<>();
 		}
 
-		indegree = new int[n];
-
 		m = Integer.parseInt(br.readLine());
+
+		indegree = new int[n];
 
 		// 앞쪽이 자식, 뒤쪽이 조상님
 		for (int i = 0; i < m; i++) {
@@ -80,17 +83,26 @@ public class Main {
 			// 자식의 indegree 1 증가
 			indegree[child]++;
 		}
+
+		children = new ArrayList[n];
+		for (int i = 0; i < n; i++) {
+			children[i] = new ArrayList<>();
+		}
 	}
 
 	private static void solution() {
 		// 출력형태
 		StringBuilder sb = new StringBuilder();
 
+		// 순회를 위한 queue
+		Queue<Integer> queue = new LinkedList<>();
+
 		// indegree 수치를 보고 root를 찾아 가문의 수 세기
 		ArrayList<Integer> roots = new ArrayList<>();
 		for (int i = 0; i < n; i++) {
 			if (indegree[i] == 0) {
 				roots.add(i);
+				queue.offer(i);
 			}
 		}
 		sb.append(roots.size()).append("\n");
@@ -101,29 +113,28 @@ public class Main {
 		}
 		sb.append("\n");
 
-		// 사전 순대로 자식 수와 사전 순으로 자식 이름 세기
-		for (int i = 0; i < n; i++) {
-			// 이번에 자식 수를 셀 사람 이름
-			sb.append(member[i]).append(" ");
+		while (!queue.isEmpty()) {
+			int cur = queue.poll();
 
-			// 자식들 저장할 리스트
-			ArrayList<String> children = new ArrayList<>();
-
-			// 연결된 자식들 순회
-			for (int child : adj[i]) {
-				// 직속 자손만 체크
-				if (indegree[i] - indegree[child] > 1) {
-					children.add(member[child]);
+			// 직속 자손 체크하기
+			for (int next : adj[cur]) {
+				indegree[next]--;
+				if (indegree[next] == 0) {
+					children[cur].add(member[next]);
+					queue.offer(next);
 				}
 			}
+		}
 
-			// 출력 형태에 저장
-			sb.append(children.size()).append(" ");
-
-			// 사전순으로 입력
-			Collections.sort(children);
-			for (String name : children) {
-				sb.append(name).append(" ");
+		// 한 명씩 돌아가면서 자식 관계 사전순 출력
+		for (int i = 0; i < n; i++) {
+			sb.append(member[i]).append(" ");
+			
+			sb.append(children[i].size()).append(" ");
+			
+			Collections.sort(children[i]);
+			for (String child : children[i]) {
+				sb.append(child).append(" ");
 			}
 			sb.append("\n");
 		}
