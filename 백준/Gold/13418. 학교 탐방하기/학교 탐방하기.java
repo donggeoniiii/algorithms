@@ -34,8 +34,14 @@ public class Main {
 		if (b1 == b2) {
 			return true;
 		}
+		if (root[b1] == root[b2]) {
+			root[b1]--;
+		}
+		if (root[b1] < root[b2]) {
+			root[b1] = b2;
+		}
+		else root[b2] = root[b1];
 
-		root[b2] = b1;
 		return false;
 	}
 
