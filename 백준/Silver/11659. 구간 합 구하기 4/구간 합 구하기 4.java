@@ -13,12 +13,11 @@ public class Main {
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
 
-		int[] nums = new int[n+1]; // nums[i] : i번째 수
 		int[] pSum = new int[n+1]; // pSum[i] : 1 ~ i까지 누적합
 		st = new StringTokenizer(br.readLine());
 		for (int i = 1; i <= n; i++) {
-			nums[i] = Integer.parseInt(st.nextToken());
-			pSum[i] = pSum[i-1] + nums[i];
+			int num = Integer.parseInt(st.nextToken());
+			pSum[i] = pSum[i-1] + num;
 		}
 
 		// i ~ j번째 수까지 합 == j까지 합 - (i-1)까지 합
