@@ -25,13 +25,13 @@ public class Main {
 		int r;
 		int c;
 		int age;
-		int dead;
+		boolean dead;
 
 		Tree (int r, int c, int age) {
 			this.r = r;
 			this.c = c;
 			this.age = age;
-			this.dead = 0;
+			this.dead = false;
 		}
 
 	}
@@ -43,8 +43,8 @@ public class Main {
 	private static Queue<Integer> deadTree;
 
 	// 주변에 나무를 심기 위한 델타배열
-	private static int[] dr = {-1, -1, -1, 0, 1, 1, 1, 0};
-	private static int[] dc = {-1, 0, 1, -1, -1, 0, 1, 1};
+	private static final int[] dr = {-1, -1, -1, 0, 1, 1, 1, 0};
+	private static final int[] dc = {-1, 0, 1, -1, -1, 0, 1, 1};
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -126,7 +126,7 @@ public class Main {
 			Tree ct = tree.get(deadTree.poll());
 
 			land[ct.r][ct.c] += ct.age / 2;
-			ct.dead = 1; // 죽었다고 표시
+			ct.dead = true; // 죽었다고 표시
 		}
 	}
 
@@ -134,7 +134,7 @@ public class Main {
 		List<Tree> newTree = new ArrayList<>();
 		for (Tree t : tree) {
 			// 죽은 나무 제외
-			if (t.dead == 1) continue;
+			if (t.dead) continue;
 
 			// 나무 중에 번식할 수 있는 나무면
 			if (t.age % 5 == 0) {
@@ -143,9 +143,9 @@ public class Main {
 			}
 		}
 
-		// 새로운 리스트로 리뉴얼
+		// 새로운 리스트로 리뉴얼, 새로 생긴 나무들이 먼저 리스트에 들어갔으니 나이 정렬상태 유지
 		for (Tree t : tree) {
-			if (t.dead == 1) continue;
+			if (t.dead) continue;
 			newTree.add(t);
 		}
 		tree = newTree;
@@ -158,7 +158,7 @@ public class Main {
 
 			if (outOfIndex(nr, nc)) continue;
 
-			// 1짜리 나무 심기
+			// 나이 1짜리 나무 심기
 			newTree.add(new Tree(nr, nc, 1));
 		}
 	}
