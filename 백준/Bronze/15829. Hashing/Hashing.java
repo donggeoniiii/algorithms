@@ -3,6 +3,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 
 public class Main {
 	private static final int CO = 31;
@@ -14,11 +15,15 @@ public class Main {
 		int l = Integer.parseInt(br.readLine());
 		String input = br.readLine();
 
-		long total = 0;
+		BigInteger total = new BigInteger("0");
+		BigInteger pow = new BigInteger("1");
 		for (int i = 0; i < input.length(); i++) {
-			total += (long)((input.charAt(i) - 'a' + 1) * Math.pow(CO, i));
+			total = total.add(BigInteger.valueOf(input.charAt(i) - 'a' + 1).multiply(pow));
+			pow = pow.multiply(BigInteger.valueOf(CO));
 		}
 
-		System.out.println(total % MOD);
+		total = total.mod(BigInteger.valueOf(MOD));
+
+		System.out.println(total);
 	}
 }
