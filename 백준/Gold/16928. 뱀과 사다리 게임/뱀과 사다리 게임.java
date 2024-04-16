@@ -1,62 +1,71 @@
+// 뱀과 사다리 게임
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws NumberFormatException, IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stringTokenizer = new StringTokenizer(br.readLine());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(stringTokenizer.nextToken());
-        int M = Integer.parseInt(stringTokenizer.nextToken());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		// 사다리의 수, 뱀의 수
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
 
-        int[] snakeAndladder = new int[101];
-        boolean[] isVisited = new boolean[101];
-        int[] count = new int[101];
+		int[] ladder = new int[101];
+		for (int i = 0; i < n+m; i++) {
+			st = new StringTokenizer(br.readLine());
+			int src = Integer.parseInt(st.nextToken());
+			int dest = Integer.parseInt(st.nextToken());
+			ladder[src] = dest;
+		}
 
-        for(int i = 0 ; i < N+M ; i++){
-            stringTokenizer  = new StringTokenizer(br.readLine());
-            int u = Integer.parseInt(stringTokenizer.nextToken());
-            int v = Integer.parseInt(stringTokenizer.nextToken());
+		Queue<Integer> queue = new LinkedList<>();
+		boolean[] visited = new boolean[101];
+		int[] turn = new int[101];
+		queue.offer(1);
+		visited[1] = true;
 
-            snakeAndladder[u] = v;
-        }
+		while (!queue.isEmpty()) {
+			int cur = queue.poll();
 
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(1);
-        count[1] = 0;
-        isVisited[1] = true;
+			// 100번째를 찾으면 종료
+			if (cur == 100) {
+				System.out.println(turn[cur]);
+				return;
+			}
 
-        while(!queue.isEmpty()){
-            int now = queue.poll();
+			for (int dice = 1; dice <= 6; dice++) {
+				int next = cur + dice;
 
-            if(now == 100){
-                System.out.println(count[now]);
-                break;
-            }
+				// 100을 넘어가면 스킵
+				if (next > 100) continue;
 
-            for(int i = 1; i <= 6; i++){
-                int next = now + i;
+				// 이미 온적 있으면 절대 가장 빠른 경로가 아님
+				if (visited[next]) continue;
 
-                if(100 < next || isVisited[next])  continue;
-
-                if(snakeAndladder[next] != 0){
-                    if(!isVisited[snakeAndladder[next]]){
-                        isVisited[snakeAndladder[next]] = true;
-                        count[snakeAndladder[next]] = count[now] + 1;
-                        queue.offer(snakeAndladder[next]);
-                    }
-                }
-                else{
-                    isVisited[next] = true;
-                    count[next] = count[now] + 1;
-                    queue.offer(next);
-                }
-            }
-        }
-    }
+				// 사다리나 뱀인 경우
+				if (ladder[next] != 0) {
+					
+					// 이미 한번 가본 길이면 스킵
+					if (visited[ladder[next]]) continue;
+					
+					// 아니면 타고 가보기
+					queue.offer(ladder[next]);
+					visited[ladder[next]] = true;
+					turn[ladder[next]] = turn[cur] + 1;
+				}
+				// 아닌 경우
+				else {
+					queue.offer(next);
+					visited[next] = true;
+					turn[next] = turn[cur] + 1;
+				}
+			}
+		}
+	}
 }
