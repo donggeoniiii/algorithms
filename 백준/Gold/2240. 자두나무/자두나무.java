@@ -29,33 +29,35 @@ public class Main {
 			memo[1][1] = 1;
 		}
 
-		for (int time = 2; time <= t; time++) {
-			int plumIdx = plum[time];
+		for (int curTime = 2; curTime <= t; curTime++) {
+			int curPlumIdx = plum[curTime];
+			int prevTime = curTime - 1;
 
 			// move == 0: 1번 나무 밑에 계속 있으므로 1번에 떨어지면 추가, 아니면 이전까지 받은 개수 그대로
-			if (plumIdx == 1) {
-				memo[time][0] = memo[time-1][0] + 1;
+			if (curPlumIdx == 1) {
+				memo[curTime][0] = memo[prevTime][0] + 1;
 			}
 			else {
-				memo[time][0] = memo[time-1][0];
+				memo[curTime][0] = memo[prevTime][0];
 			}
 
 			// move >= 1: 자두가 떨어지는 위치와 이전까지 받은 개수를 고려해 최대값 입력
-			for (int move = 1; move <= w; move++) {
-				if (plumIdx == 1){
-					if (move % 2 == 0) {
-						memo[time][move] = Math.max(memo[time-1][move] + 1, memo[time-1][move-1]);
+			for (int curMove = 1; curMove <= w; curMove++) {
+				int prevMove = curMove - 1;
+				if (curPlumIdx == 1){
+					if (curMove % 2 == 0) {
+						memo[curTime][curMove] = Math.max(memo[prevTime][curMove] + 1, memo[prevTime][prevMove]);
 					}
 					else {
-						memo[time][move] = Math.max(memo[time-1][move-1] + 1, memo[time-1][move]);
+						memo[curTime][curMove] = Math.max(memo[prevTime][prevMove] + 1, memo[prevTime][curMove]);
 					}
 				}
-				if (plumIdx == 2) {
-					if (move % 2 == 1) {
-						memo[time][move] = Math.max(memo[time-1][move] + 1, memo[time-1][move-1]);
+				if (curPlumIdx == 2) {
+					if (curMove % 2 == 1) {
+						memo[curTime][curMove] = Math.max(memo[prevTime][curMove] + 1, memo[prevTime][prevMove]);
 					}
 					else {
-						memo[time][move] = Math.max(memo[time-1][move-1] + 1, memo[time-1][move]);
+						memo[curTime][curMove] = Math.max(memo[prevTime][prevMove] + 1, memo[prevTime][curMove]);
 					}
 				}
 			} // for-loop (move)
