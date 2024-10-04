@@ -1,83 +1,79 @@
-import java.util.Scanner;
+// 케빈 베이컨의 6단계 법칙
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    // 유저의 수, 친구 관계의 수
-    static int n, m;
+	static List<Integer>[] adj;
 
-    // 인접배열
-    static int[][] adj;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    // 배열 초기화를 위한 큰 수
-    static final int INF = Integer.MAX_VALUE;
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-    // 케빈 베이컨 수를 합산한 배열
-    static int[] totalCnt;
+		int n = Integer.parseInt(st.nextToken());
+		adj = new ArrayList[n+1];
+		for (int i = 1; i < n+1; i++) {
+			adj[i] = new ArrayList<>();
+		}
 
-    // 케빈 베이컨 최솟값
-    static int minCnt;
+		int m = Integer.parseInt(st.nextToken());
+		for (int i = 0; i < m; i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
 
-    // 최솟값을 갖는 사람
-    static int answer;
+			adj[a].add(b);
+			adj[b].add(a);
+		}
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+		// 케빈 베이컨 점수 기록기
+		int[] score = new int[n+1];
 
-        // 유저의 수, 친구 관계의 수
-        n = input.nextInt();
-        m = input.nextInt();
+		for (int src = 1; src < n+1; src++) {
+			Queue<Integer> queue = new ArrayDeque<>();
+			int[] visited = new int[n+1];
+			Arrays.fill(visited, -1);
 
-        // 배열 및 변수 초기화
-        adj = new int[n+1][n+1];
-        totalCnt = new int[n+1];
-        minCnt = 9999;
-        answer = 0;
+			queue.offer(src);
+			visited[src] = 0;
+			while (!queue.isEmpty()) {
+				int cur = queue.poll();
 
-        // 거리 계산의 편의성을 위해 인접배열의 값은 큰 값으로 초기화
-        for (int src = 1; src <= n; src++){
-            for (int dest = 1; dest <= n; dest++){
-                // 시작점과 도착점이 같으면 자기자신, 거리는 0이어야 하니까 제외
-                if (src != dest)
-                    adj[src][dest] = INF;
-            }
-        }
+				for (int next : adj[cur]) {
+					if (visited[next] >= 0) continue;
 
-        // 친구관계 입력
-        for (int edge = 1; edge <= m; edge++){
-            int src = input.nextInt();
-            int dest = input.nextInt();
+					queue.offer(next);
+					visited[next] = visited[cur] + 1;
 
-            // 양방향으로 입력
-            adj[src][dest] = adj[dest][src] = 1;
-        }
+				}
+			}
 
-        // floyd-warshall: 모든 정점에서 모든 정점간에 최소 거리 계산
-        for (int joint = 1; joint <= n; joint++) {
-            for (int src = 1; src <= n; src++) {
-                for (int dest = 1; dest <= n; dest++) {
-                    // 최솟값으로 갱신
-                    if (adj[src][joint] != INF && adj[joint][dest] != INF)
-                        adj[src][dest] = Math.min(adj[src][dest], adj[src][joint] + adj[joint][dest]);
-                }
-            }
-        }
+			// 점수 합치기
+			for (int i = 1; i < n+1; i++) {
+				if (visited[i] == -1) continue;
 
-        // 거리 합 구하기, 모든 사람들은 연결되어 있다는 가정이 있으므로 inf값이 들어갈 일 없음
-        for (int src = 1; src <= n; src++) {
-            for (int dest = 1; dest <= n; dest++){
-                totalCnt[src] += adj[src][dest];
-            }
+				score[src] += visited[i];
+			}
+		}
 
-            // 케빈베이컨 점수가 최솟값이 갱신되었으면
-            if (totalCnt[src] < minCnt){
-                // 정답 수정
-                answer = src;
+		// 최소 점수 가진 사람 찾기
+		int min = Integer.MAX_VALUE;
+		int answer = 0;
+		for (int i = 1; i < n+1; i++) {
+			if (score[i] < min) {
+				min = score[i];
+				answer = i;
+			}
+		}
 
-                // 최솟값 갱신
-                minCnt = totalCnt[src];
-            }
-        }
-
-        // 정답 출력
-        System.out.println(answer);
-    }
+		System.out.println(answer);
+	}
 }
