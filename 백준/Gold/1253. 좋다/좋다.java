@@ -20,9 +20,9 @@ public class Main {
 		Arrays.sort(nums);
 
 		int goodCount = 0;
-		for (int i = 0; i < n; i++) {
-			// 배열 내 두 수의 합으로 찾을 수 있는지 확인할 숫자
-			if (isExist(nums, i)) {
+		for (int cur = 0; cur < n; cur++) {
+			// 배열 내 두 수의 합으로 찾을 수 있는지 확인
+			if (isExist(nums, cur)) {
 				goodCount++;
 			}
 		}
@@ -36,8 +36,10 @@ public class Main {
 
 			int target = nums[curIdx] - nums[i];
 
+			// 같은 수가 여러 개인 경우에 대비해 lower bound 탐색
 			int index = lowerBound(nums, target);
 
+			// 발견한 값이 원래 값도 아니고 합이 될 두 수 중 다른 하나도 아니면 카운트 증가 후 true 반환
 			while (index < nums.length && nums[index] == target) {
 				if (index != curIdx && index != i) {
 					return true;
