@@ -1,105 +1,71 @@
-//N과 M9
+// N과 M(9)
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
-	static StringBuilder sb = new StringBuilder();
-	
-	/** 
-	 * 주어지는 수의 개수 
-	 */
-	static int N;
-	
-	/**
-	 *  고르는 수의 개수
-	 */
-	static int M;
-	
-	/**
-	 *  주어지는 숫자 배열
-	 */
-	static int[] nums;
-	
-	/**
-	 *  선택한 숫자 배열
-	 */
-	static int[] selected;
-	
-	/**
-	 * 추가했는지 확인하는 배열
-	 */
-	static boolean[] checked;
-	
-	/**
-	 * 탐색 알고리즘
-	 * @param cnt 현재까지 선택한 숫자 개수 
-	 * @param sdx 다음 숫자를 고르기 시작할 index (start index)
-	 */
-	static void track(int cnt, int sdx) {
-		
-		// base case: M개를 선택하면
-		if (cnt == M) {
-			// 출력
-			for (int idx = 0; idx < M; idx++) {
-				sb.append(selected[idx]).append(" ");
+	private static int n, m;
+
+	private static int[] selectedNums;
+
+	private static boolean[] selected;
+
+	private static StringBuilder answer;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
+
+		int[] nums = new int[n];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < n; i++) {
+			nums[i] = Integer.parseInt(st.nextToken());
+		}
+
+		// 사전순 출력을 위해 정렬
+		Arrays.sort(nums);
+
+		selectedNums = new int[m];
+		selected = new boolean[n];
+
+		answer = new StringBuilder();
+		countAllSequences(nums, 0);
+
+		System.out.println(answer);
+	}
+
+	private static void countAllSequences(int[] nums, int curCount) {
+		// base case: 길이가 m이면 종료
+		if (curCount >= m) {
+			for (int i = 0; i < m; i++) {
+				answer.append(selectedNums[i]).append(" ");
 			}
-			sb.append("\n");
+			answer.append("\n");
 			return;
 		}
-		
-		// 마지막에 고른 수
-		int last = 0;
-		
-		// recursive case
-		for (int i = 0; i < N; i++) {
-			// 이미 선택한 경우 제외
-			if (checked[i]) continue;
-			
-			// 만약 이전 좌표값과 같으면 제외
-			if (i != 0 && nums[i] == last) continue;
-			
-			// 선택
-			checked[i] = true;
-			
-			// 마지막에 고른 수 저장
-			last = nums[i];
-			
-			selected[cnt] = nums[i];
-			
-			// 다음 선택을 위해 이동
-			track(cnt+1, sdx);
-			
-			// 선택 해제
-			checked[i] = false;
-			
+
+		int prev = -1; // 정렬된 배열에서만 사용 가능
+		for (int i = 0; i < n; i++) {
+			// 이미 해당 index를 포함한 경우 스킵
+			if (selected[i]) continue;
+
+			int cur = nums[i];
+
+			// 이미 이전에 해당 값을 사용한 적이 있으면 스킵
+			if (prev == cur) continue;
+
+			selected[i] = true;
+			selectedNums[curCount] = cur;
+			prev = cur;
+			countAllSequences(nums, curCount + 1);
+			selected[i] = false;
 		}
 	}
-	
-	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
-		
-		// 입력
-		N = input.nextInt();
-		M = input.nextInt();
-		
-		// 배열 크기 입력
-		nums = new int[N];
-		selected = new int[M];
-		checked = new boolean[N];
-		
-		// 숫자 입력
-		for (int idx = 0; idx < N; idx++) nums[idx] = input.nextInt();
-	
-		// 오름차순 출력을 휘해 정렬
-		Arrays.sort(nums);
-		
-		// 탐색 on
-		track(0, 0);
-		
-		// 정답 출력
-		System.out.println(sb.toString());
-		
-		input.close();
-	}
+
 }
