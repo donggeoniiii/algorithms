@@ -1,0 +1,6 @@
+-- 코드를 작성해주세요
+SELECT ID, IF (SIZE_OF_COLONY <= 100, "LOW", 
+               IF (100 < SIZE_OF_COLONY && SIZE_OF_COLONY <= 1000, "MEDIUM", "HIGH")) AS SIZE
+FROM ECOLI_DATA
+ORDER BY ID;
+
