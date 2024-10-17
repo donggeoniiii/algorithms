@@ -1,0 +1,15 @@
+-- 코드를 입력하세요
+SELECT MEMBER_NAME, R.REVIEW_TEXT, DATE_FORMAT(R.REVIEW_DATE, '%Y-%m-%d') AS REVIEW_DATE
+FROM MEMBER_PROFILE M
+    JOIN (SELECT MEMBER_ID,
+                REVIEW_TEXT, 
+                REVIEW_DATE
+          FROM REST_REVIEW
+          GROUP BY MEMBER_ID
+          ORDER BY COUNT(*) DESC
+          LIMIT 1
+    ) TEMP
+    ON M.MEMBER_ID = TEMP.MEMBER_ID -- 필요한 아이디 찾아내기
+    JOIN REST_REVIEW R
+    ON R.MEMBER_ID = M.MEMBER_ID -- 해당 아이디로 쓴 리뷰만 가져오기
+ORDER BY 3, 2;
