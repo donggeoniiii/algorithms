@@ -1,0 +1,26 @@
+WITH QUARTER_ECOLI_DATA 
+AS (
+    SELECT
+        ID, 
+        CASE
+            WHEN MONTH(DIFFERENTIATION_DATE) <= 3
+            THEN 1
+            WHEN MONTH(DIFFERENTIATION_DATE) <= 6
+            THEN 2
+            WHEN MONTH(DIFFERENTIATION_DATE) <= 9
+            THEN 3
+            ELSE 4
+        END QUARTER
+    FROM 
+        ECOLI_DATA
+)
+
+SELECT
+    CONCAT(QUARTER, 'Q') AS QUARTER, COUNT(*) AS ECOLI_COUNT
+FROM   
+    QUARTER_ECOLI_DATA
+GROUP BY
+    1
+ORDER BY
+    1;
+    
