@@ -1,0 +1,21 @@
+WITH SUWON_AIR_POLLUTION 
+AS ( 
+    SELECT 
+        *
+    FROM
+        AIR_POLLUTION
+    WHERE
+        LOCATION2 = '수원'
+)
+
+SELECT
+    YEAR(YM) AS YEAR,
+    ROUND(AVG(PM_VAL1), 2) AS 'PM10',
+    ROUND(AVG(PM_VAL2), 2) AS 'PM2.5'
+FROM
+    SUWON_AIR_POLLUTION
+GROUP BY
+    1
+ORDER BY
+    1;
+    
