@@ -1,0 +1,30 @@
+WITH APPOINTMENT_NOT_CANCELED 
+AS (
+    SELECT 
+        * 
+    FROM
+        APPOINTMENT
+    WHERE
+        YEAR(APNT_YMD) = 2022
+        AND MONTH(APNT_YMD) = 4
+        AND DAY(APNT_YMD) = 13
+        AND APNT_CNCL_YN != 'Y' 
+        AND MCDP_CD = 'CS'
+)
+
+SELECT 
+    APNT_NO, PT_NAME, P.PT_NO, A.MCDP_CD, DR_NAME, APNT_YMD
+FROM
+    PATIENT P
+JOIN   
+    APPOINTMENT_NOT_CANCELED A
+ON 
+    P.PT_NO = A.PT_NO
+JOIN
+    DOCTOR D
+ON  
+    A.MDDR_ID = D.DR_ID
+ORDER BY
+    6;
+
+    
