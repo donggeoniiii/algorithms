@@ -1,0 +1,55 @@
+WITH TRUCK_RENTAL_HISTORY
+AS (
+    SELECT 
+        H.HISTORY_ID, H.CAR_ID, 
+        DATEDIFF(END_DATE, START_DATE) + 1 AS DURATION,
+        (DATEDIFF(END_DATE, START_DATE) + 1) * DAILY_FEE AS TOTAL_FEE
+    FROM 
+        CAR_RENTAL_COMPANY_RENTAL_HISTORY H
+    JOIN 
+        CAR_RENTAL_COMPANY_CAR C
+    ON
+        H.CAR_ID = C.CAR_ID
+    WHERE 
+        C.CAR_TYPE = '트럭'
+),
+TRUCK_DISCOUNT_PLAN
+AS (
+    SELECT
+        PLAN_ID,
+        DURATION_TYPE,
+        DISCOUNT_RATE
+    FROM
+        CAR_RENTAL_COMPANY_DISCOUNT_PLAN 
+    WHERE
+        CAR_TYPE = '트럭'
+)
+
+SELECT 
+    HISTORY_ID, 
+    FLOOR (
+    CASE
+        WHEN DURATION >= 90
+        THEN (TOTAL_FEE * (100 - (
+              SELECT DISCOUNT_RATE 
+              FROM TRUCK_DISCOUNT_PLAN
+              WHERE DURATION_TYPE LIKE '90%')) / 100)
+        WHEN DURATION >= 30
+        THEN (TOTAL_FEE * (100 - (
+              SELECT DISCOUNT_RATE 
+              FROM TRUCK_DISCOUNT_PLAN
+              WHERE DURATION_TYPE LIKE '30%')) / 100)
+        WHEN DURATION >= 7
+        THEN (TOTAL_FEE * (100 - (
+              SELECT DISCOUNT_RATE 
+              FROM TRUCK_DISCOUNT_PLAN
+              WHERE DURATION_TYPE LIKE '7%')) / 100)
+        ELSE TOTAL_FEE
+    END)
+    AS FEE
+FROM
+    TRUCK_RENTAL_HISTORY
+ORDER BY
+    2 DESC, 1 DESC;
+
+    
