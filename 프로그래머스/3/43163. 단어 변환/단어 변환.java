@@ -21,7 +21,6 @@ class Solution {
     
     static int solve(String begin, String target, String[] words) {
         int answer = 0;
-        int n = words.length;
         
         // 최단거리 탐색을 위해 선입선출 구조의 queue 활용
         Queue<String> queue = new ArrayDeque<>();
@@ -31,18 +30,19 @@ class Solution {
         HashSet<String> notVisited = new HashSet<>(Arrays.asList(words));
         
         while (!queue.isEmpty()) {
-            for (int i = 0; i < queue.size(); i++) {   
+            int levelSize = queue.size();
+            for (int i = 0; i < levelSize; i++) {   
                 String cur = queue.poll();
-
-                // 정답에 도달했으면
-                if (cur.equals(target)) {
-                    // 현재 변환횟수 반환
-                    return answer;
-                }
 
                 for (String next : notVisited.toArray(new String[notVisited.size()])) {
                     if (!isAdjacent(cur, next)) continue;
 
+                    // 다음 이동에 타겟 도달하면
+                    if (next.equals(target)) {
+                        // 변환횟수 + 1로 정답 반환
+                        return answer + 1;
+                    }
+                    
                     queue.offer(next);
                     notVisited.remove(next);
                 }
