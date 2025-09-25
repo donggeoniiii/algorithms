@@ -1,50 +1,36 @@
 import java.util.*;
 
 class Solution {
-    static int[] network;
-    static List<Integer>[] adj;
-    
-    public int solution(int n, int[][] computers) { // computers: 인접 정보
+    public int solution(int n, int[][] computers) {
         int answer = 0;
         
-        network = new int[n];
-        adj = new ArrayList[n];
+        boolean[] visited = new boolean[n];
         for (int i = 0; i < n; i++) {
-            adj[i] = new ArrayList<>();
-        }
-        
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i != j && computers[i][j] == 1) {
-                    adj[i].add(j);
-                    adj[j].add(i);
-                }
-            }
-        }
-        
-        for (int i = 0; i < n; i++) {
-            if (network[i] > 0) continue;
+            if (visited[i]) continue;
             
-            check(++answer, i);
+            findConnectedComputers(i, computers, visited);
+            answer++;
         }
         
         return answer;
     }
     
-    static void check(int networkIdx, int src) {
+    void findConnectedComputers(int src, int[][] computers, boolean[] visited) {
         Queue<Integer> queue = new ArrayDeque<>();
         
         queue.offer(src);
-        network[src] = networkIdx;
+        visited[src] = true;
         
         while (!queue.isEmpty()) {
             int cur = queue.poll();
             
-            for (int next : adj[cur]) {
-                if (network[next] > 0) continue;
+            for (int next = 0; next < computers.length; next++) {
+                if (computers[cur][next] == 0) continue;
+                
+                if (visited[next]) continue;
                 
                 queue.offer(next);
-                network[next] = networkIdx;
+                visited[next] = true;
             }
         }
     }
