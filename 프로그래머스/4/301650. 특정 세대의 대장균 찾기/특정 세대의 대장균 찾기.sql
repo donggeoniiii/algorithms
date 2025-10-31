@@ -1,9 +1,25 @@
--- 코드를 작성해주세요
-SELECT A.ID
-FROM ECOLI_DATA A
-    JOIN ECOLI_DATA B
-    ON A.PARENT_ID = B.ID
-    JOIN ECOLI_DATA C
-    ON B.PARENT_ID = C.ID 
-WHERE C.PARENT_ID IS NULL -- 3세대 대장균: 할아버지가 1세대
-ORDER BY A.ID;
+WITH FIRST_GEN AS (
+    SELECT *
+    FROM
+        ECOLI_DATA
+    WHERE
+        PARENT_ID IS NULL
+)
+     
+SELECT 
+    T.ID
+FROM
+    ECOLI_DATA T
+WHERE
+    T.PARENT_ID IN (
+        SELECT 
+            S.ID
+        FROM 
+            ECOLI_DATA S
+        JOIN 
+            FIRST_GEN F
+        ON 
+            S.PARENT_ID = F.ID
+    )
+ORDER BY
+    1 ASC;
