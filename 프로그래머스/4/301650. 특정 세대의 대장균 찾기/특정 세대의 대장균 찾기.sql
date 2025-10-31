@@ -1,25 +1,32 @@
-WITH FIRST_GEN AS (
-    SELECT *
+WITH RECURSIVE ECOLI_GEN AS (
+    SELECT 
+        ID,
+        PARENT_ID,
+        1 AS GENERATION
     FROM
         ECOLI_DATA
     WHERE
         PARENT_ID IS NULL
+    
+    UNION ALL
+    
+    SELECT
+        E.ID,
+        E.PARENT_ID,
+        G.GENERATION + 1 AS GENERATION
+    FROM
+        ECOLI_DATA E
+    JOIN   
+        ECOLI_GEN G
+    ON 
+        E.PARENT_ID = G.ID
 )
      
 SELECT 
-    T.ID
+    ID
 FROM
-    ECOLI_DATA T
+    ECOLI_GEN 
 WHERE
-    T.PARENT_ID IN (
-        SELECT 
-            S.ID
-        FROM 
-            ECOLI_DATA S
-        JOIN 
-            FIRST_GEN F
-        ON 
-            S.PARENT_ID = F.ID
-    )
+    GENERATION = 3 -- 3세대
 ORDER BY
     1 ASC;
