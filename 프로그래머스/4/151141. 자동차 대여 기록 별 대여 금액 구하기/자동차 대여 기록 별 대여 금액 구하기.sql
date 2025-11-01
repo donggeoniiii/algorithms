@@ -32,18 +32,18 @@ SELECT
         WHEN DURATION >= 90
         THEN (TOTAL_FEE * (100 - (
               SELECT DISCOUNT_RATE 
-              FROM TRUCK_DISCOUNT_PLAN
-              WHERE DURATION_TYPE LIKE '90%')) / 100)
+              FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN
+              WHERE DURATION_TYPE LIKE '90%' AND CAR_TYPE = '트럭')) / 100)
         WHEN DURATION >= 30
         THEN (TOTAL_FEE * (100 - (
               SELECT DISCOUNT_RATE 
-              FROM TRUCK_DISCOUNT_PLAN
-              WHERE DURATION_TYPE LIKE '30%')) / 100)
+              FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN
+              WHERE DURATION_TYPE LIKE '30%' AND CAR_TYPE = '트럭')) / 100)
         WHEN DURATION >= 7
         THEN (TOTAL_FEE * (100 - (
               SELECT DISCOUNT_RATE 
-              FROM TRUCK_DISCOUNT_PLAN
-              WHERE DURATION_TYPE LIKE '7%')) / 100)
+              FROM CAR_RENTAL_COMPANY_DISCOUNT_PLAN
+              WHERE DURATION_TYPE LIKE '7%' AND CAR_TYPE = '트럭')) / 100)
         ELSE TOTAL_FEE
     END)
     AS FEE
@@ -51,5 +51,3 @@ FROM
     TRUCK_RENTAL_HISTORY
 ORDER BY
     2 DESC, 1 DESC;
-
-    
