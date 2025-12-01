@@ -8,22 +8,22 @@ class Solution {
         
         sums = new HashSet<>();
         
-        // 최대 길이가 1000 -> 길이 1짜리 1000개 + 2짜리 1000개 + 3짜리 1000개 + ... + 1000 * 1000
-        // ((n * (n + 1)) / 2) * n -> O(n^3)
-        // 최대 1000이면 터짐
-        for (int start = 0; start < n; start++) {
-            for (int len = 1; len <= n; len++) {
-                int curSum = 0;
+        // dp[i] : i에서 시작하는 len 길이 원통수열 부분합
+        int[] dp = new int[n];
+        
+        // 초기화
+        for (int i = 0; i < n; i++) {
+            dp[i] += elements[i];
+            sums.add(dp[i]);
+        }
+        
+        // 길이 증가시키면서 부분합 배열 갱신
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i < n; i++) {
+                dp[i] += elements[(i + len - 1) % n];
                 
-                for (int i = 0; i < len; i++) {
-                    int cur = start + i;
-                    if (cur >= n) {
-                        cur -= n;
-                    }
-                    curSum += elements[cur];
-                }
-                
-                sums.add(curSum);                            
+                // i에서 시작하는 len 길이 부분합 생길 때마다 set에 추가
+                sums.add(dp[i]);
             }
         }
         
