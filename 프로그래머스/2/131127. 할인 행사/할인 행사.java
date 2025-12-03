@@ -12,15 +12,10 @@ class Solution {
         for (String s : discount) {
             if (beforeFirst10()) {
                 addNewDiscountInfo(s);
-                
-                if (isMatched(latest10, number)) answer++;
-    
-                continue;
+            } else {
+                removeExpiredDiscountInfo();
+                addNewDiscountInfo(s);
             }
-            
-            removeExpiredDiscountInfo();
-            
-            addNewDiscountInfo(s);
             
             if (isMatched(latest10, number)) answer++;
         }
